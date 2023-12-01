@@ -29,18 +29,19 @@ ENV NODE_ENV = production
 
 WORKDIR /usr/src/frontend
 
-COPY  package.json ./
+# COPY  package.json ./
 
-COPY  package-lock.json ./
+# COPY  package-lock.json ./
 
-COPY  public ./public
-COPY  src ./src
+# COPY  public ./public
+# COPY  src ./src
 
 
-# COPY ./frontend/package.json ./
-# COPY ./frontend/package-lock.json ./
-# COPY ./frontend/public ./public
-# COPY ./frontend/src ./src
+COPY ./frontend/package.json ./
+COPY ./frontend/package-lock.json ./
+COPY ./frontend/public ./public
+COPY ./frontend/src ./src
+
 RUN npm install
 RUN npm run build
 
