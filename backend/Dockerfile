@@ -19,10 +19,10 @@ ENV NODE_ENV = production
 
 WORKDIR /usr/src/backend 
 
-COPY ./frontend/package.json ./
-COPY ./frontend/package-lock.json ./
-COPY ./frontend/public ./public
-COPY ./frontend/src ./src
+COPY  package.json ./
+
+COPY  package-lock.json ./
+
 
 RUN npm install
 
