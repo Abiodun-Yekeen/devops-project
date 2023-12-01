@@ -1,0 +1,139 @@
+version: '3'
+
+
+services:
+
+  # postgres:
+  #   image: postgres:11.5
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_PASSWORD=admin
+  #     - POSTGRES_DB=app_db
+  #   ports:
+  #     -5432:5432
+  #   networks:
+  #     - shared-network
+  #   volumes:
+  #     - ./postgres-db:/var/lib/postgresql/data
+
+
+  backend:
+    container_name: backend
+    restart: unless-stopped
+    image: backend-prod:1.0
+    build: 
+      context: ./backend
+      # target: production
+      dockerfile: ./Dockerfile
+    ports:
+      - 8080:8080
+    # networks:
+    #   - shared-network
+    # depends_on:
+    #   - postgres
+
+
+
+  frontend:
+    container_name: frontend
+    restart: unless-stopped
+    image: frontend-prod:1.0
+    build: 
+      context: ./frontend
+      # target: production
+      dockerfile: ./Dockerfile
+    ports:
+      - 80:80
+    # networks:
+    #   - shared-network
+    depends_on:
+      - backend
+
+
+
+
+ 
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: dockerfile
+  #   ports:
+  #     - "3000:3000"  # Adjust the port if needed
+  #   depends_on:
+  #     - backend
+
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: dockerfile
+  #   ports:
+  #     - "9005:9005"  
+
+      
+      # Adjust the port if needed
+#     networks:
+#       - mern-app
+#     depends_on:
+#       - mongo
+#   mongo:
+#     image: mongo:3.6.19-xenial
+#     ports:
+#       - "27017:27017"
+#     networks:
+#       - mern-app
+#     volumes:
+#       - mongo-data:/data/db
+# networks:
+#   mern-app:
+#     driver: bridge
+# volumes:
+#   mongo-data:
+#     driver: local
+
+# server:
+#         build: ./backend
+#         expose:
+#             - 5600
+#         ports:
+#             - 5600:5600
+#         volumes:
+#             - ./backend/src:/srv/app/admin-server/src
+#         depends_on:
+#             - mongo    
+#         command: npm run start
+
+# client:
+#         build: ./frontend
+#         expose:
+#             - 3000   
+#         ports:
+#             - 80:3000
+#         volumes:
+#             - ./frontend/src:/srv/app/admin-client/src
+#             - ./frontend/public:/srv/app/admin-client/public
+#         stdin_open: true
+#         command: npm run start        
+
+# mongo:
+#         image: mongo
+#         ports:
+#             - "27017:27017"
+
+
+
+# services:
+#   frontend:
+#     build:
+#       context: ./Frontend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "3000:3000"  # Adjust the port if needed
+#     depends_on:
+#       - backend
+
+#   backend:
+#     build:
+#       context: ./Backend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "5600:5600"  # Adjust the port if needed
