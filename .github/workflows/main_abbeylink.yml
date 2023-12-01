@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         tags: abbeylink.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_0653ac3352ed4e2eac7db823abb825e3 }}/abbeylink/frontend-prod:${{ github.sha }}
-        file: ./Dockerfile
+        file: ./frontend/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
