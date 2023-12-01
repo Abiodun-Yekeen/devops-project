@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://abbeylink.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_afe7923452984fc486903dec0b06eafb }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_131231727cda44bebae43baafbc2d898 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_0653ac3352ed4e2eac7db823abb825e3 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_8cecbea66d1f4b35a8bbc8dc6040cb44 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: abbeylink.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_afe7923452984fc486903dec0b06eafb }}/frontend-prod:${{ github.sha }}
+        tags: abbeylink.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_0653ac3352ed4e2eac7db823abb825e3 }}/abbeylink/frontend-prod:${{ github.sha }}
         file: ./frontend/Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'abbeylink'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_3cfdb62eaebe44c28a361bc0726236dc }}
-        images: 'abbeylink.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_afe7923452984fc486903dec0b06eafb }}/frontend-prod:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_de5a08d5090644dd9ab245ca78488584 }}
+        images: 'abbeylink.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_0653ac3352ed4e2eac7db823abb825e3 }}/abbeylink/frontend-prod:${{ github.sha }}'
