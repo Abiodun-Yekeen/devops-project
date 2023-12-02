@@ -17,8 +17,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
       
-      - name: Set AWS Region
-        run: aws configure set region ${{ secrets.AWS_REGION }}
         
       - name: Build and push Docker images
         run: |
@@ -33,5 +31,5 @@ jobs:
           application_name: devops-project
           environment_name: Devops-project-env
           version_label: "version-${{ github.sha }}"
-          region: ${{ secrets.AWS_REGION }}
+          region: eu-north-1
           deployment_package: docker-compose.yml
