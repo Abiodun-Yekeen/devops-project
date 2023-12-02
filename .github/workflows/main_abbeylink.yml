@@ -1,51 +1,35 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy container app to Azure Web App - abbeylink
+name: Deploy Docker Compose to AWS Elastic Beanstalk
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: 'ubuntu-latest'
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
-    - name: Log in to registry
-      uses: docker/login-action@v2
-      with:
-        registry: https://abbeylink.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_0653ac3352ed4e2eac7db823abb825e3 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_8cecbea66d1f4b35a8bbc8dc6040cb44 }}
-
-    - name: Build and push container image to registry
-      uses: docker/build-push-action@v3
-      with:
-        push: true
-        tags: abbeylink.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_0653ac3352ed4e2eac7db823abb825e3 }}/abbeylink/frontend-prod:${{ github.sha }}
-        file: ./frontend/Dockerfile
-
   deploy:
     runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-    - name: Deploy to Azure Web App
-      id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'abbeylink'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_de5a08d5090644dd9ab245ca78488584 }}
-        images: 'abbeylink.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_0653ac3352ed4e2eac7db823abb825e3 }}/abbeylink/frontend-prod:${{ github.sha }}'
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Login to AWS ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry: ${{ secrets.AWS_REGISTRY }}
+
+      - name: Build and push Docker images
+        run: |
+          docker-compose build
+          docker-compose push
+      
+      - name: Deploy to AWS Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v14
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: devops-project
+          environment_name: Devops-project-env
+          version_label: "version-${{ github.sha }}"
+          region: your-aws-region
+          deployment_package: docker-compose.yml
