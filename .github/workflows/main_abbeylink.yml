@@ -31,5 +31,5 @@ jobs:
           application_name: devops-project
           environment_name: Devops-project-env
           version_label: "version-${{ github.sha }}"
-          region: your-aws-region
+          region: eu-north-1
           deployment_package: docker-compose.yml
